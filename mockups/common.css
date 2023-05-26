@@ -15,3 +15,13 @@ body {
   overflow: auto;
   height: 66vh;
 }
+
+.item-card:hover {
+  border: 1px solid #0dcaf0;
+}
+
+.image-fit {
+  object-fit: contain;
+  max-width: 65%;
+  height: auto;
+}
