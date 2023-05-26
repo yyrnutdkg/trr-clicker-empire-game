@@ -2,3 +2,16 @@ body {
   font-family: Futura !important;
   letter-spacing: 0.01rem !important;
 }
+
+.bg-navy {
+  background-color: #3d5279;
+}
+
+.border-navy {
+  border: 5px solid #212529;
+}
+
+.available-items-list {
+  overflow: auto;
+  height: 66vh;
+}
