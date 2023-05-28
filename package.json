@@ -1,0 +1,15 @@
+{
+  "name": "trr-clicker-empire-game",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:yyrnutdkg/trr-clicker-empire-game.git",
+  "author": "yyrnutdkg <yyrnutdkg@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "jest": "^29.5.0"
+  },
+  "scripts": {
+      "test": "jest"
+    }
+}
