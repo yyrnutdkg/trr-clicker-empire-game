@@ -13,7 +13,7 @@
       crossorigin="anonymous"
     />
 
-    <title>enter_mock</title>
+    <title>ClickEmpireGame</title>
     <link rel="stylesheet" href="common.css" />
 
     <!-- fontawesome -->
@@ -24,6 +24,28 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="target"></div>
+    <div
+      class="vh-100 bg-dark d-flex justify-content-center align-items-center"
+    >
+      <div class="col-7 d-flex align-items-center p-4" id="signupLoginPage">
+        <div class="col-12 bg-white text-center p-4">
+          <h2>Clicker Empire Game</h2>
+          <form class="py-3">
+            <input type="text" class="form-control" placeholder="Your name" />
+          </form>
+          <div class="d-flex justify-content-between pt-2">
+            <div class="col-6 pe-2">
+              <button type="submit" class="btn btn-primary col-12">New</button>
+            </div>
+            <div class="col-6 ps-2">
+              <button type="submit" class="btn btn-primary col-12">
+                Login
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="mainGamePage"></div>
+    </div>
   </body>
 </html>
