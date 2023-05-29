@@ -11,31 +11,49 @@ class GameAccount {
   }
 }
 
-function initializeUserAccount() {
-  const initialForm = document.getElementById("userForm");
-  console.log(initialForm);
-
-  let userAccount = new GameAccount(
-    initialForm.querySelectorAll(`input[name="userName"]`).item(0).value
-  );
-
-  console.log(userAccount);
-
-  signupLoginPage.classList.add("d-none");
-}
-
-function gamePlaySave(userAcount) {
+function gameDataSave(userAcount) {
   let accountEncoded = JSON.stringify(userAcount);
   localStorage.setItem(userAcount.userName, accountEncoded);
 }
 
-let testAcount = new GameAccount("test", "24", "1580", "10000");
-gamePlaySave(testAcount);
+function gameDataLoad(userName) {
+  let gameAccountData = "";
 
-function gamePlayLoad(userName) {
-  let accountData = localStorage.getItem(userName);
-  console.log(accountData);
-  let accountDataDecode = JSON.parse(accountData);
-  console.log(typeof accountDataDecode);
-  console.log(accountDataDecode);
+  let savedData = localStorage.getItem(userName);
+  if (savedData === null) {
+    return gameAccountData;
+  }
+  gameAccountData = JSON.parse(savedData);
+
+  return gameAccountData;
 }
+
+function initializeUserAccount() {
+  const initialForm = document.getElementById("userForm");
+  let userName = initialForm
+    .querySelectorAll(`input[name="userName"]`)
+    .item(0).value;
+
+  if (userName === "") return alert("Please put your name");
+  let userAccount = new GameAccount(userName, 0, 0, 50000);
+
+  console.log(userAccount);
+  signupLoginPage.classList.add("d-none");
+}
+
+function loginUserAccount() {
+  const initialForm = document.getElementById("userForm");
+  let userName = initialForm
+    .querySelectorAll(`input[name="userName"]`)
+    .item(0).value;
+
+  if (userName === "") return alert("Please put your name");
+
+  if (gameDataLoad(userName) === "") return alert("There is no data");
+  let userGameAccunt = gameDataLoad(userName);
+  console.log(userGameAccunt);
+  signupLoginPage.classList.add("d-none");
+}
+
+let testAcount = new GameAccount("test", "24", "1580", "10000");
+gameDataSave(testAcount);
