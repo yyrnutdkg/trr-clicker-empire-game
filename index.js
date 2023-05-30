@@ -38,7 +38,7 @@ function initializeUserAccount() {
   let userAccount = new GameAccount(userName, 0, 0, 50000);
 
   console.log(userAccount);
-  signupLoginPage.classList.add("d-none");
+  config.signupLoginPage.classList.add("d-none");
 }
 
 function loginUserAccount() {
@@ -52,7 +52,7 @@ function loginUserAccount() {
   if (gameDataLoad(userName) === "") return alert("There is no data");
   let userGameAccunt = gameDataLoad(userName);
   console.log(userGameAccunt);
-  signupLoginPage.classList.add("d-none");
+  config.signupLoginPage.classList.add("d-none");
 }
 
 let testAcount = new GameAccount("test", "24", "1580", "10000");
