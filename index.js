@@ -139,11 +139,12 @@ function initializeUserAccount() {
     .item(0).value;
 
   if (userName === "") return alert("Please put your name");
-  let userGameAccount = new GameAccount(userName, 0, 0, 50000);
+  let userGameAccount = new GameAccount(userName, 20, 0, 50000, 0, 25, 0);
 
   config.signupLoginPage.classList.add("d-none");
   config.mainGamePage.classList.add("d-block");
   config.mainGamePage.append(mainGamePage(userGameAccount));
+  startCount(userGameAccount);
 }
 
 function loginUserAccount() {
