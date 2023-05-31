@@ -1,0 +1,21 @@
+.bg-navy {
+  background-color: #3d5279;
+}
+.border-navy {
+  border: 5px solid #212529;
+}
+
+.image-fit {
+  object-fit: contain;
+  max-width: 65%;
+  height: auto;
+}
+
+.available-items-list {
+  overflow: auto;
+  height: 66vh;
+}
+
+.item-card:hover {
+  border: 1px solid #0dcaf0;
+}
