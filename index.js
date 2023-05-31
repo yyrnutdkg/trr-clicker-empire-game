@@ -5,15 +5,21 @@ config = {
 };
 
 class GameAccount {
-  constructor(userName, years, days, money) {
+  constructor(userName, year, days, money) {
     this.userName = userName;
-    this.years = years;
+    this.year = year;
     this.days = days;
     this.money = money;
   }
 
   updateDay() {
     this.days = this.days + 1;
+    return this.days;
+  }
+  checkYear() {
+    if (this.days % 365 == 0) this.year = this.year + 1;
+
+    return this.year;
   }
 }
 
@@ -94,7 +100,7 @@ function gameDataLoad(userName) {
 
   let gameAccountData = new GameAccount(
     gameAccountDataObj.userName,
-    parseInt(gameAccountDataObj.years),
+    parseInt(gameAccountDataObj.year),
     parseInt(gameAccountDataObj.days),
     parseInt(gameAccountDataObj.money)
   );
@@ -173,7 +179,7 @@ function mainGamePage(gameAccount) {
 
   infoCon.innerHTML = `<div class="bg-dark row m-0 text-center text-white">
   <div class="bg-navy border-navy col-6 user-name"><p>${gameAccount.userName}</p></div>
-  <div class="bg-navy border-navy col-6 user-year"><p>${gameAccount.years}years old</p></div>
+  <div class="bg-navy border-navy col-6"><p id="user-year">${gameAccount.year}years old</p></div>
   <div class="bg-navy border-navy col-6"><p id="user-days">${gameAccount.days}days</p></div>
   <div class="bg-navy border-navy col-6 user-money"><p>¥${gameAccount.money}</p></div></div>`;
 
@@ -293,5 +299,9 @@ function startCount(userGameAccount) {
     let userDay = document.getElementById("user-days");
     userGameAccount.updateDay();
     userDay.innerHTML = `${userGameAccount.days}days`;
+
+    let userYear = document.getElementById("user-year");
+
+    userYear.innerHTML = `${userGameAccount.checkYear()}years old`;
   }, 1000);
 }
