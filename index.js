@@ -87,9 +87,24 @@ function mainGamePage(gameAccount) {
   burgerImg.src = "images/hamburger.png";
 
   burgerImgCon.append(burgerImg);
-
   leftContainer.append(burgerCon, burgerImgCon);
-  navyContainer.append(leftContainer);
+
+  let rightContainer = document.createElement("div");
+  rightContainer.classList.add("col-8", "px-2");
+  rightContainer.id = "right-area";
+
+  let infoCon = document.createElement("div");
+  infoCon.classList.add("pt-2", "pb-4", "px-2");
+  infoCon.id = "info-area";
+
+  infoCon.innerHTML = `<div class="bg-dark row m-0 text-center text-white">
+  <div class="bg-navy border-navy col-6"><p>test2</p></div>
+  <div class="bg-navy border-navy col-6"><p>29years old</p></div>
+  <div class="bg-navy border-navy col-6"><p>3000days</p></div>
+  <div class="bg-navy border-navy col-6"><p>¥3000</p></div></div>`;
+
+  rightContainer.append(infoCon);
+  navyContainer.append(leftContainer, rightContainer);
   container.append(navyContainer);
 
   config.mainGamePage.append(container);

@@ -1,6 +1,9 @@
 .bg-navy {
   background-color: #3d5279;
 }
+.border-navy {
+  border: 5px solid #212529;
+}
 
 .image-fit {
   object-fit: contain;
