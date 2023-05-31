@@ -70,12 +70,25 @@ function mainGamePage(gameAccount) {
   leftContainer.classList.add("col-4", "bg-dark", "p-2");
   leftContainer.id = "left-area";
 
-  let infoCon = document.createElement("div");
-  infoCon.classList.add("bg-navy", "text-center", "text-white");
-  infoCon.innerHTML = `<h4>2254 Burgers</h4>`;
-  infoCon.innerHTML += `<p>one click ￥200</p>`;
+  let burgerCon = document.createElement("div");
+  burgerCon.classList.add("bg-navy", "text-center", "text-white");
+  burgerCon.innerHTML = `<h4>2254 Burgers</h4><p>one click ￥200</p>`;
 
-  leftContainer.append(infoCon);
+  let burgerImgCon = document.createElement("div");
+  burgerImgCon.classList.add(
+    "col-12",
+    "d-flex",
+    "justify-content-center",
+    "p-1"
+  );
+
+  let burgerImg = document.createElement("img");
+  burgerImg.classList.add("image-fit", "col-10", "pt-4");
+  burgerImg.src = "images/hamburger.png";
+
+  burgerImgCon.append(burgerImg);
+
+  leftContainer.append(burgerCon, burgerImgCon);
   navyContainer.append(leftContainer);
   container.append(navyContainer);
 

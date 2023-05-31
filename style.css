@@ -1,3 +1,9 @@
 .bg-navy {
   background-color: #3d5279;
 }
+
+.image-fit {
+  object-fit: contain;
+  max-width: 65%;
+  height: auto;
+}
