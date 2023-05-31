@@ -23,14 +23,19 @@ class GameAccount {
     this.updateAmountPerSecond = updateAmountPerSecond;
   }
 
-  updateDay() {
-    this.days = this.days + 1;
-    return this.days;
+  updatePerSeconds() {
+    this.updateDay(1);
+    this.updateYear(1);
+    this.updateMoney();
   }
-  checkYear() {
-    if (this.days % 365 == 0) this.year = this.year + 1;
-
-    return this.year;
+  updateDay(updateCount) {
+    this.days = this.days + updateCount;
+  }
+  updateYear(updateCount) {
+    if (this.days % 365 == 0) this.year = this.year + updateCount;
+  }
+  updateMoney() {
+    this.money = this.money + this.updateAmountPerSecond;
   }
 
   clicked() {
@@ -324,11 +329,14 @@ gameDataSave(testAcount);
 function startCount(userGameAccount) {
   setInterval(function () {
     let userDay = document.getElementById("user-days");
-    userGameAccount.updateDay();
+    userGameAccount.updatePerSeconds();
     userDay.innerHTML = `${userGameAccount.days}days`;
 
     let userYear = document.getElementById("user-year");
 
-    userYear.innerHTML = `${userGameAccount.checkYear()}years old`;
+    userYear.innerHTML = `${userGameAccount.year}years old`;
+
+    let userMoney = document.getElementById("user-money");
+    userMoney.innerHTML = `¥${userGameAccount.money}`;
   }, 1000);
 }
