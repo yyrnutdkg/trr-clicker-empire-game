@@ -14,8 +14,9 @@ class GameAccount {
 }
 
 class GameItem {
-  constructor(name, maxItemCount, price, profit, profitType, imgUrl) {
+  constructor(name, amount, maxItemCount, price, profit, profitType, imgUrl) {
     this.name = name;
+    this.amount = amount;
     this.maxItemCount = maxItemCount;
     this.price = price;
     this.profit = profit;
@@ -25,16 +26,25 @@ class GameItem {
 }
 
 const gameItems = [
-  new GameItem("Flip machine", 500, 15000, 25, "click", "grill.png"),
-  new GameItem("ETF Stock", Infinity, 300000, 0.1, "sec", "syouken.png"),
-  new GameItem("ETF Bonds", Infinity, 300000, 0.1, "sec", "syouken.png"),
-  new GameItem("Lemonade Stand", 1000, 30000, 30, "sec", "lemonade.png"),
-  new GameItem("Ice Cream Truck", 500, 100000, 120, "sec", "icecream.png"),
-  new GameItem("House", 100, 20000000, 32000, "sec", "house_1.png"),
-  new GameItem("TownHouse", 100, 40000000, 64000, "sec", "designers_house.png"),
-  new GameItem("Mansion", 20, 250000000, 500000, "sec", "mansion.png"),
+  new GameItem("Flip machine", 0, 500, 15000, 25, "click", "grill.png"),
+  new GameItem("ETF Stock", 0, Infinity, 300000, 0.1, "sec", "syouken.png"),
+  new GameItem("ETF Bonds", 0, Infinity, 300000, 0.1, "sec", "syouken.png"),
+  new GameItem("Lemonade Stand", 0, 1000, 30000, 30, "sec", "lemonade.png"),
+  new GameItem("Ice Cream Truck", 0, 500, 100000, 120, "sec", "icecream.png"),
+  new GameItem("House", 0, 100, 20000000, 32000, "sec", "house_1.png"),
+  new GameItem(
+    "TownHouse",
+    0,
+    100,
+    40000000,
+    64000,
+    "sec",
+    "designers_house.png"
+  ),
+  new GameItem("Mansion", 0, 20, 250000000, 500000, "sec", "mansion.png"),
   new GameItem(
     "Industrial Space",
+    0,
     10,
     1000000000,
     2200000,
@@ -43,6 +53,7 @@ const gameItems = [
   ),
   new GameItem(
     "Hotel Skyscraper",
+    0,
     5,
     10000000000,
     25000000,
@@ -51,6 +62,7 @@ const gameItems = [
   ),
   new GameItem(
     "Bullet-Speed Sky Railway",
+    0,
     1,
     10000000000000,
     30000000000,
@@ -198,7 +210,9 @@ function itemList() {
   </div>`;
 
     itemCon.addEventListener("click", function () {
-      showItem(container, gameItems[i]);
+      let itemDetail = showItem(container, gameItems[i]);
+      container.innerHTML = "";
+      container.append(itemDetail);
     });
     container.append(itemCon);
   }
@@ -206,8 +220,56 @@ function itemList() {
   return container;
 }
 
-function showItem(node, item) {
-  console.log(node);
+function showItem(nodeList, item) {
+  let container = document.createElement("div");
+  container.classList.add("col-12", "bg-navy");
+
+  container.innerHTML = `
+    <div class="d-flex justify-content-between">
+      <div class="col-6 p-3 text-white">
+        <h4>${item.name}</h4>
+        <p>Max purchases: ${
+          item.maxItemCount === Infinity ? "∞" : item.maxItemCount
+        }</p>
+        <p>Price: ￥${item.price}</p>
+        <p>Get ￥${item.profit} /${item.profitType}</p>
+      </div>
+      <div class="col-6 d-flex align-items-center justify-content-center">
+        <img src="${config.imgPass}${item.imgUrl}" alt="" class="image-fit" />
+      </div>
+    </div>
+    <div>
+      <p class="ps-2 text-white">How many would you like to buy?</p>
+      <form class="pt-1 px-2" action="">
+        <input type="number" placeholder="0" class="col-12 form-control" />
+      </form>
+      <p class="p-2 text-end text-white">total: ¥0</p>
+    </div>`;
+
+  let btnCon = document.createElement("div");
+  btnCon.classList.add("row", "m-0", "mb-2", "pb-3");
+  btnCon.innerHTML = `<div class="row m-0 mb-2 pb-3">
+  <div class="col-6 p-2">
+    <button
+      class="btn btn-outline-primary col-12 bg-light back-btn"
+    >
+      Go Back
+    </button>
+  </div>
+  <div class="col-6 p-2">
+    <button class="btn btn-primary col-12 next-btn">
+      Purchase
+    </button>
+  </div>`;
+  container.append(btnCon);
+
+  let backbtn = btnCon.querySelectorAll(".back-btn")[0];
+  backbtn.addEventListener("click", function () {
+    container.innerHTML = "";
+    container.append(itemList());
+  });
+
+  return container;
 }
 
 let testAcount = new GameAccount("test", "24", "1580", "10000");
