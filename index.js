@@ -11,6 +11,10 @@ class GameAccount {
     this.days = days;
     this.money = money;
   }
+
+  updateDay() {
+    this.days = this.days + 1;
+  }
 }
 
 class GameItem {
@@ -79,13 +83,21 @@ function gameDataSave(userAcount) {
 }
 
 function gameDataLoad(userName) {
-  let gameAccountData = "";
+  let gameAccountDataObj = "";
 
   let savedData = localStorage.getItem(userName);
   if (savedData === null) {
-    return gameAccountData;
+    return gameAccountDataObj;
   }
-  gameAccountData = JSON.parse(savedData);
+
+  gameAccountDataObj = JSON.parse(savedData);
+
+  let gameAccountData = new GameAccount(
+    gameAccountDataObj.userName,
+    parseInt(gameAccountDataObj.years),
+    parseInt(gameAccountDataObj.days),
+    parseInt(gameAccountDataObj.money)
+  );
 
   return gameAccountData;
 }
@@ -279,7 +291,7 @@ gameDataSave(testAcount);
 function startCount(userGameAccount) {
   setInterval(function () {
     let userDay = document.getElementById("user-days");
-    userGameAccount.days++;
+    userGameAccount.updateDay();
     userDay.innerHTML = `${userGameAccount.days}days`;
   }, 1000);
 }
