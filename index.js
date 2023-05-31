@@ -118,6 +118,7 @@ function loginUserAccount() {
   config.mainGamePage.classList.add("d-block");
 
   config.mainGamePage.append(mainGamePage(userGameAccount));
+  startCount(userGameAccount);
 }
 
 function mainGamePage(gameAccount) {
@@ -159,10 +160,10 @@ function mainGamePage(gameAccount) {
   infoCon.id = "info-area";
 
   infoCon.innerHTML = `<div class="bg-dark row m-0 text-center text-white">
-  <div class="bg-navy border-navy col-6"><p>${gameAccount.userName}</p></div>
-  <div class="bg-navy border-navy col-6"><p>${gameAccount.years}years old</p></div>
-  <div class="bg-navy border-navy col-6"><p>${gameAccount.days}days</p></div>
-  <div class="bg-navy border-navy col-6"><p>¥${gameAccount.money}</p></div></div>`;
+  <div class="bg-navy border-navy col-6 user-name"><p>${gameAccount.userName}</p></div>
+  <div class="bg-navy border-navy col-6 user-year"><p>${gameAccount.years}years old</p></div>
+  <div class="bg-navy border-navy col-6"><p id="user-days">${gameAccount.days}days</p></div>
+  <div class="bg-navy border-navy col-6 user-money"><p>¥${gameAccount.money}</p></div></div>`;
 
   let itemCon = document.createElement("div");
   itemCon.classList.add("bg-dark", "p-2", "available-items-list");
@@ -272,5 +273,13 @@ function showItem(nodeList, item) {
   return container;
 }
 
-let testAcount = new GameAccount("test", "24", "1580", "10000");
+let testAcount = new GameAccount("test", "20", "360", "10000");
 gameDataSave(testAcount);
+
+function startCount(userGameAccount) {
+  setInterval(function () {
+    let userDay = document.getElementById("user-days");
+    userGameAccount.days++;
+    userDay.innerHTML = `${userGameAccount.days}days`;
+  }, 1000);
+}
