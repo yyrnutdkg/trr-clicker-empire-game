@@ -5,11 +5,22 @@ config = {
 };
 
 class GameAccount {
-  constructor(userName, year, days, money) {
+  constructor(
+    userName,
+    year,
+    days,
+    money,
+    clickCount,
+    amountPerClick,
+    updateAmountPerSecond
+  ) {
     this.userName = userName;
     this.year = year;
     this.days = days;
     this.money = money;
+    this.clickCount = clickCount;
+    this.amountPerClick = amountPerClick;
+    this.updateAmountPerSecond = updateAmountPerSecond;
   }
 
   updateDay() {
@@ -102,7 +113,10 @@ function gameDataLoad(userName) {
     gameAccountDataObj.userName,
     parseInt(gameAccountDataObj.year),
     parseInt(gameAccountDataObj.days),
-    parseInt(gameAccountDataObj.money)
+    parseInt(gameAccountDataObj.money),
+    parseInt(gameAccountDataObj.clickCount),
+    parseInt(gameAccountDataObj.amountPerClick),
+    parseInt(gameAccountDataObj.updateAmountPerSecond)
   );
 
   return gameAccountData;
@@ -291,7 +305,7 @@ function showItem(nodeList, item) {
   return container;
 }
 
-let testAcount = new GameAccount("test", "20", "360", "10000");
+let testAcount = new GameAccount("test", "20", "360", "10000", 0, 25, 25);
 gameDataSave(testAcount);
 
 function startCount(userGameAccount) {
