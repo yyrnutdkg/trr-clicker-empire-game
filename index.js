@@ -97,10 +97,11 @@ function initializeUserAccount() {
     .item(0).value;
 
   if (userName === "") return alert("Please put your name");
-  let userAccount = new GameAccount(userName, 0, 0, 50000);
+  let userGameAccount = new GameAccount(userName, 0, 0, 50000);
 
-  console.log(userAccount);
   config.signupLoginPage.classList.add("d-none");
+  config.mainGamePage.classList.add("d-block");
+  config.mainGamePage.append(mainGamePage(userGameAccount));
 }
 
 function loginUserAccount() {
@@ -112,15 +113,14 @@ function loginUserAccount() {
   if (userName === "") return alert("Please put your name");
 
   if (gameDataLoad(userName) === "") return alert("There is no data");
-  let userGameAccunt = gameDataLoad(userName);
-  console.log(userGameAccunt);
+  let userGameAccount = gameDataLoad(userName);
   config.signupLoginPage.classList.add("d-none");
-  mainGamePage(userGameAccunt);
+  config.mainGamePage.classList.add("d-block");
+
+  config.mainGamePage.append(mainGamePage(userGameAccount));
 }
 
 function mainGamePage(gameAccount) {
-  config.mainGamePage.classList.add("d-block");
-
   let container = document.createElement("div");
   container.classList.add("col-12", "col-md-10", "col-lg-9");
 
@@ -174,7 +174,7 @@ function mainGamePage(gameAccount) {
   navyContainer.append(leftContainer, rightContainer);
   container.append(navyContainer);
 
-  config.mainGamePage.append(container);
+  return container;
 }
 
 function itemList() {
