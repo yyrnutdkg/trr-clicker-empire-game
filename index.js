@@ -32,6 +32,11 @@ class GameAccount {
 
     return this.year;
   }
+
+  clicked() {
+    this.clickCount = this.clickCount + 1;
+    this.money = this.money + this.amountPerClick;
+  }
 }
 
 class GameItem {
@@ -166,7 +171,7 @@ function mainGamePage(gameAccount) {
 
   let burgerCon = document.createElement("div");
   burgerCon.classList.add("bg-navy", "text-center", "text-white");
-  burgerCon.innerHTML = `<h4>2254 Burgers</h4><p>one click ￥200</p>`;
+  burgerCon.innerHTML = `<h4 id="click-count">${gameAccount.clickCount} Burgers</h4><p>one click ￥${gameAccount.amountPerClick}</p>`;
 
   let burgerImgCon = document.createElement("div");
   burgerImgCon.classList.add(
@@ -179,6 +184,14 @@ function mainGamePage(gameAccount) {
   let burgerImg = document.createElement("img");
   burgerImg.classList.add("image-fit", "col-10", "pt-4");
   burgerImg.src = `${config.imgPass}hamburger.png`;
+
+  burgerImgCon.addEventListener("click", function () {
+    gameAccount.clicked();
+    let clickCountH4 = document.getElementById("click-count");
+    let userMoneyP = document.getElementById("user-money");
+    clickCountH4.innerHTML = `${gameAccount.clickCount} Burgers`;
+    userMoneyP.innerHTML = `¥${gameAccount.money}`;
+  });
 
   burgerImgCon.append(burgerImg);
   leftContainer.append(burgerCon, burgerImgCon);
@@ -195,7 +208,7 @@ function mainGamePage(gameAccount) {
   <div class="bg-navy border-navy col-6 user-name"><p>${gameAccount.userName}</p></div>
   <div class="bg-navy border-navy col-6"><p id="user-year">${gameAccount.year}years old</p></div>
   <div class="bg-navy border-navy col-6"><p id="user-days">${gameAccount.days}days</p></div>
-  <div class="bg-navy border-navy col-6 user-money"><p>¥${gameAccount.money}</p></div></div>`;
+  <div class="bg-navy border-navy col-6"><p id="user-money">¥${gameAccount.money}</p></div></div>`;
 
   let itemCon = document.createElement("div");
   itemCon.classList.add("bg-dark", "p-2", "available-items-list");
