@@ -79,12 +79,13 @@ class GameItem {
   }
 }
 
-function gameDataSave(userAcount) {
+function gameDataSave(userAcount, counter) {
   let accountEncoded = JSON.stringify(userAcount);
   localStorage.setItem(userAcount.userName, accountEncoded);
+  endGame(counter);
 }
 function gameDataReset(userAccount, counter) {
-  localStorage.removeItem(userAccount.name);
+  localStorage.removeItem(userAccount.userName);
   endGame(counter);
 }
 
@@ -236,10 +237,7 @@ function createInitialUser(name) {
     ),
   ];
 
-  let user =
-    name === "stringtest"
-      ? new GameAccount("テストアカウント", 20, 360, 100000000, 0, 0, itemList)
-      : new GameAccount(name, 20, 0, 50000, 25, 0, itemList);
+  let user = new GameAccount(name, 20, 0, 50000, 25, 0, itemList);
   return user;
 }
 
@@ -262,8 +260,8 @@ function moveToSignupLoginPage() {
 function startGame(userAccount) {
   moveToMainPage(userAccount);
   let timerId = startCount(userAccount);
-  let systemBtns = config.mainGamePage.querySelectorAll(".system-btn-area")[0];
-  systemBtns.setAttribute("data-sbtn", timerId);
+  //let systemBtns = config.mainGamePage.querySelectorAll(".system-btn-area")[0];
+  config.mainGamePage.setAttribute("data-sbtn", timerId);
 }
 function endGame(counter) {
   stopCount(counter);
@@ -351,7 +349,7 @@ function mainGamePage(userAccount) {
   systemBtnArea.innerHTML = `<div class="col-5 system-icon reset-btn">
       <i class="fas fa-undo fa-3x p-1"></i>
     </div>
-    <div class="col-5 system-icon" id="save-btn">
+    <div class="col-5 system-icon save-btn">
       <i class="fas fa-save fa-3x p-1"></i>
     </div>`;
 
@@ -360,10 +358,22 @@ function mainGamePage(userAccount) {
 
   let resetBtn = systemBtnArea.querySelectorAll(".reset-btn")[0];
   resetBtn.addEventListener("click", function () {
-    let timerId = parseInt(systemBtnArea.getAttribute("data-sbtn"));
     let alertMes = confirm("Reset Your Account?");
     if (alertMes) {
+      let timerId = parseInt(config.mainGamePage.getAttribute("data-sbtn"));
       gameDataReset(userAccount, timerId);
+    }
+  });
+
+  let saveBtn = systemBtnArea.querySelectorAll(".save-btn")[0];
+  saveBtn.addEventListener("click", function () {
+    let alertMes = confirm("Save Your Account?");
+    if (alertMes) {
+      let timerId = parseInt(config.mainGamePage.getAttribute("data-sbtn"));
+      alert(
+        `Please enter your username to log in. your username is "${userAccount.userName}"`
+      );
+      gameDataSave(userAccount, timerId);
     }
   });
 
@@ -556,9 +566,6 @@ function purchaseItem(userAccount, itemNumber, purchaseInput) {
   }
   return alert(`Purchase of the ${item.name} was successful!.`);
 }
-
-let testAcount = createInitialUser("test");
-gameDataSave(testAcount);
 
 function startCount(userGameAccount) {
   let timerId = setInterval(function () {
