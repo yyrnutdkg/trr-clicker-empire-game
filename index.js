@@ -79,130 +79,6 @@ class GameItem {
   }
 }
 
-const gameItems = [
-  new GameItem(
-    "Flip machine",
-    "ability",
-    500,
-    15000,
-    0,
-    25,
-    "click",
-    0,
-    "grill.png"
-  ),
-  new GameItem(
-    "ETF Stock",
-    "investment",
-    Infinity,
-    300000,
-    10,
-    0.1,
-    "sec",
-    0.1,
-    "syouken.png"
-  ),
-  new GameItem(
-    "ETF Bonds",
-    "investment",
-    Infinity,
-    300000,
-    0,
-    0.1,
-    "sec",
-    0.07,
-    "syouken.png"
-  ),
-  new GameItem(
-    "Lemonade Stand",
-    "realEstate",
-    1000,
-    30000,
-    0,
-    30,
-    "sec",
-    0,
-    "lemonade.png"
-  ),
-  new GameItem(
-    "Ice Cream Truck",
-    "realEstate",
-    500,
-    100000,
-    0,
-    120,
-    "sec",
-    0,
-    "icecream.png"
-  ),
-  new GameItem(
-    "House",
-    "realEstate",
-    100,
-    20000000,
-    0,
-    32000,
-    "sec",
-    0,
-    "house_1.png"
-  ),
-  new GameItem(
-    "TownHouse",
-    "realEstate",
-    100,
-    40000000,
-    0,
-    64000,
-    "sec",
-    0,
-    "designers_house.png"
-  ),
-  new GameItem(
-    "Mansion",
-    "realEstate",
-    20,
-    250000000,
-    0,
-    500000,
-    "sec",
-    0,
-    "mansion.png"
-  ),
-  new GameItem(
-    "Industrial Space",
-    "realEstate",
-    10,
-    1000000000,
-    0,
-    2200000,
-    "sec",
-    0,
-    "koujou.png"
-  ),
-  new GameItem(
-    "Hotel Skyscraper",
-    "realEstate",
-    5,
-    10000000000,
-    0,
-    25000000,
-    "sec",
-    0,
-    "hotel.png"
-  ),
-  new GameItem(
-    "Bullet-Speed Sky Railway",
-    "realEstate",
-    1,
-    10000000000000,
-    0,
-    30000000000,
-    "sec",
-    0,
-    "shinkansen.png"
-  ),
-];
-
 function gameDataSave(userAcount) {
   let accountEncoded = JSON.stringify(userAcount);
   localStorage.setItem(userAcount.userName, accountEncoded);
@@ -562,7 +438,7 @@ function showItem(userAccount, itemNumber) {
   let purchaseBtn = btnCon.querySelectorAll(".next-btn")[0];
   purchaseBtn.addEventListener("click", function () {
     let purchaseInput = parseInt(document.getElementById("quantity").value);
-    purchaseItem(userAccount, item, arrayCounter, purchaseInput);
+    purchaseItem(userAccount, itemNumber, purchaseInput);
     config.mainGamePage.innerHTML = "";
     config.mainGamePage.append(mainGamePage(userAccount));
   });
@@ -570,8 +446,30 @@ function showItem(userAccount, itemNumber) {
   return container;
 }
 
-function purchaseItem(userAccount, item, arrayCounter, purchaseInput) {
+function calcTotalPrice(item, quantity) {
+  if (quantity <= 0) return 0;
+  if (item.name === "ETF Stock") {
+    let priceUpRate = item.purchaseIncreaseRate / 100;
+
+    let total = 0;
+    let culcPrice = 0;
+
+    for (let i = 1; i <= quantity; i++) {
+      culcPrice != 0
+        ? (culcPrice = Math.floor(culcPrice * (1 + priceUpRate)))
+        : (culcPrice = item.price);
+      total = total + culcPrice;
+    }
+
+    return total;
+  }
+  return item.price * quantity;
+}
+
+function purchaseItem(userAccount, itemNumber, purchaseInput) {
   if (purchaseInput <= 0) return alert(`You may check count for buying`);
+
+  let item = userAccount.itemInfo[itemNumber];
 
   if (purchaseInput > item.maxItemCount - item.amount)
     return alert(`You cannot purchase any more`);
@@ -581,15 +479,13 @@ function purchaseItem(userAccount, item, arrayCounter, purchaseInput) {
     return alert(`Couldn't purchase it due to insufficient funds`);
 
   userAccount.makePayment(totalPrice);
-  gameItems[arrayCounter].amount += purchaseInput;
+  item.amount += purchaseInput;
 
   if (item.type === "investment") {
-    let ProfitbyPerSeconds = Math.floor((totalPrice * item.profitRate) / 100);
-    userAccount.addAmountPerSecond(ProfitbyPerSeconds);
+    let profitByPerSeconds = Math.floor((totalPrice * item.profitRate) / 100);
+    userAccount.addAmountPerSecond(profitByPerSeconds);
     if (item.name === "ETF Stock") {
-      gameItems[arrayCounter].price = Math.floor(
-        gameItems[arrayCounter].price * 1.1
-      );
+      item.price = Math.floor(item.price * 1.1);
     }
   }
   if (item.type === "ability") {
@@ -617,24 +513,4 @@ function startCount(userGameAccount) {
     let userMoney = document.getElementById("user-money");
     userMoney.innerHTML = `¥${userGameAccount.money}`;
   }, 1000);
-}
-
-function calcTotalPrice(item, quantity) {
-  if (quantity <= 0) return 0;
-  if (item.name === "ETF Stock") {
-    let priceUpRate = item.purchaseIncreaseRate / 100;
-
-    let total = 0;
-    let culcPrice = 0;
-
-    for (let i = 1; i <= quantity; i++) {
-      culcPrice != 0
-        ? (culcPrice = Math.floor(culcPrice * (1 + priceUpRate)))
-        : (culcPrice = item.price);
-      total = total + culcPrice;
-    }
-
-    return total;
-  }
-  return item.price * quantity;
 }
