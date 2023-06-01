@@ -393,7 +393,7 @@ function loginUserAccount() {
   startGame(userAccount);
 }
 
-function mainGamePage(gameAccount) {
+function mainGamePage(userAccount) {
   let container = document.createElement("div");
   container.classList.add("col-12", "col-md-10", "col-lg-9");
 
@@ -406,7 +406,7 @@ function mainGamePage(gameAccount) {
 
   let burgerCon = document.createElement("div");
   burgerCon.classList.add("bg-navy", "text-center", "text-white");
-  burgerCon.innerHTML = `<h4 id="click-count">${gameAccount.clickCount} Burgers</h4><p>one click ￥${gameAccount.amountPerClick}</p>`;
+  burgerCon.innerHTML = `<h4 id="click-count">${userAccount.clickCount} Burgers</h4><p>one click ￥${userAccount.amountPerClick}</p>`;
 
   let burgerImgCon = document.createElement("div");
   burgerImgCon.classList.add(
@@ -421,11 +421,11 @@ function mainGamePage(gameAccount) {
   burgerImg.src = `${config.imgPass}hamburger.png`;
 
   burgerImgCon.addEventListener("click", function () {
-    gameAccount.clicked();
+    userAccount.clicked();
     let clickCountH4 = document.getElementById("click-count");
     let userMoneyP = document.getElementById("user-money");
-    clickCountH4.innerHTML = `${gameAccount.clickCount} Burgers`;
-    userMoneyP.innerHTML = `¥${gameAccount.money}`;
+    clickCountH4.innerHTML = `${userAccount.clickCount} Burgers`;
+    userMoneyP.innerHTML = `¥${userAccount.money}`;
   });
 
   burgerImgCon.append(burgerImg);
@@ -440,16 +440,16 @@ function mainGamePage(gameAccount) {
   infoCon.id = "info-area";
 
   infoCon.innerHTML = `<div class="bg-dark row m-0 text-center text-white">
-  <div class="bg-navy border-navy col-6 user-name"><p>${gameAccount.userName}</p></div>
-  <div class="bg-navy border-navy col-6"><p id="user-year">${gameAccount.year}years old</p></div>
-  <div class="bg-navy border-navy col-6"><p id="user-days">${gameAccount.days}days</p></div>
-  <div class="bg-navy border-navy col-6"><p id="user-money">¥${gameAccount.money}</p></div></div>`;
+  <div class="bg-navy border-navy col-6 user-name"><p>${userAccount.userName}</p></div>
+  <div class="bg-navy border-navy col-6"><p id="user-year">${userAccount.year}years old</p></div>
+  <div class="bg-navy border-navy col-6"><p id="user-days">${userAccount.days}days</p></div>
+  <div class="bg-navy border-navy col-6"><p id="user-money">¥${userAccount.money}</p></div></div>`;
 
   let itemCon = document.createElement("div");
   itemCon.classList.add("bg-dark", "p-2", "available-items-list");
   itemCon.id = "item-menu";
 
-  itemCon.append(itemList(gameAccount));
+  itemCon.append(itemList(userAccount));
 
   rightContainer.append(infoCon, itemCon);
   navyContainer.append(leftContainer, rightContainer);
@@ -461,8 +461,9 @@ function mainGamePage(gameAccount) {
 function itemList(userAccount) {
   let container = document.createElement("div");
   container.id = "item-container";
+  let items = userAccount.itemInfo;
 
-  for (let i = 0; i < gameItems.length; i++) {
+  for (let i = 0; i < items.length; i++) {
     let itemCon = document.createElement("div");
     itemCon.classList.add(
       "text-white",
@@ -477,21 +478,21 @@ function itemList(userAccount) {
     itemCon.innerHTML = `<div class="col-4 d-flex justify-content-center">
     <img
       class="col-12 image-fit"
-      src=${config.imgPass}${gameItems[i].imgUrl}
+      src=${config.imgPass}${items[i].imgUrl}
       alt=""
     />
   </div>
   <div class="col-4 text-start">
-    <h4>${gameItems[i].name}</h4>
-    <p>¥${gameItems[i].price}</p>
+    <h4>${items[i].name}</h4>
+    <p>¥${items[i].price}</p>
   </div>
   <div class="col-4 text-end">
-    <h4>${gameItems[i].amount}</h4>
-    <p class="text-success">¥${gameItems[i].profit} / ${gameItems[i].profitType}</p>
+    <h4>${items[i].amount}</h4>
+    <p class="text-success">¥${items[i].profit} / ${items[i].profitType}</p>
   </div>`;
 
     itemCon.addEventListener("click", function () {
-      let itemDetail = showItem(userAccount, gameItems[i], i);
+      let itemDetail = showItem(userAccount, items[i], i);
       container.innerHTML = "";
       container.append(itemDetail);
     });
