@@ -11,7 +11,8 @@ class GameAccount {
     days,
     money,
     amountPerClick,
-    updateAmountPerSecond
+    updateAmountPerSecond,
+    itemInfo
   ) {
     this.userName = userName;
     this.year = year;
@@ -20,6 +21,7 @@ class GameAccount {
     this.clickCount = 0;
     this.amountPerClick = amountPerClick;
     this.updateAmountPerSecond = updateAmountPerSecond;
+    this.itemInfo = itemInfo;
   }
 
   updatePerSeconds() {
@@ -228,19 +230,154 @@ function gameDataLoad(userName) {
   return gameAccountData;
 }
 
-function initializeUserAccount() {
+function createInitialUser(name) {
+  let itemList = [
+    new GameItem(
+      "Flip machine",
+      "ability",
+      500,
+      15000,
+      0,
+      25,
+      "click",
+      0,
+      "grill.png"
+    ),
+    new GameItem(
+      "ETF Stock",
+      "investment",
+      Infinity,
+      300000,
+      10,
+      0.1,
+      "sec",
+      0.1,
+      "syouken.png"
+    ),
+    new GameItem(
+      "ETF Bonds",
+      "investment",
+      Infinity,
+      300000,
+      0,
+      0.1,
+      "sec",
+      0.07,
+      "syouken.png"
+    ),
+    new GameItem(
+      "Lemonade Stand",
+      "realEstate",
+      1000,
+      30000,
+      0,
+      30,
+      "sec",
+      0,
+      "lemonade.png"
+    ),
+    new GameItem(
+      "Ice Cream Truck",
+      "realEstate",
+      500,
+      100000,
+      0,
+      120,
+      "sec",
+      0,
+      "icecream.png"
+    ),
+    new GameItem(
+      "House",
+      "realEstate",
+      100,
+      20000000,
+      0,
+      32000,
+      "sec",
+      0,
+      "house_1.png"
+    ),
+    new GameItem(
+      "TownHouse",
+      "realEstate",
+      100,
+      40000000,
+      0,
+      64000,
+      "sec",
+      0,
+      "designers_house.png"
+    ),
+    new GameItem(
+      "Mansion",
+      "realEstate",
+      20,
+      250000000,
+      0,
+      500000,
+      "sec",
+      0,
+      "mansion.png"
+    ),
+    new GameItem(
+      "Industrial Space",
+      "realEstate",
+      10,
+      1000000000,
+      0,
+      2200000,
+      "sec",
+      0,
+      "koujou.png"
+    ),
+    new GameItem(
+      "Hotel Skyscraper",
+      "realEstate",
+      5,
+      10000000000,
+      0,
+      25000000,
+      "sec",
+      0,
+      "hotel.png"
+    ),
+    new GameItem(
+      "Bullet-Speed Sky Railway",
+      "realEstate",
+      1,
+      10000000000000,
+      0,
+      30000000000,
+      "sec",
+      0,
+      "shinkansen.png"
+    ),
+  ];
+
+  let user =
+    name === "stringtest"
+      ? new GameAccount("テストアカウント", 20, 360, 100000000, 0, 0, itemList)
+      : new GameAccount(name, 20, 0, 50000, 25, 0, itemList);
+  return user;
+}
+
+function startGame(userAccount) {
+  config.signupLoginPage.classList.add("d-none");
+  config.mainGamePage.classList.add("d-block");
+  config.mainGamePage.append(mainGamePage(userAccount));
+  startCount(userAccount);
+}
+
+function newGame() {
   const initialForm = document.getElementById("userForm");
   let userName = initialForm
     .querySelectorAll(`input[name="userName"]`)
     .item(0).value;
-
   if (userName === "") return alert("Please put your name");
-  let userGameAccount = new GameAccount(userName, 20, 0, 50000, 25, 0);
-
-  config.signupLoginPage.classList.add("d-none");
-  config.mainGamePage.classList.add("d-block");
-  config.mainGamePage.append(mainGamePage(userGameAccount));
-  startCount(userGameAccount);
+  let userAccount = createInitialUser(userName);
+  startGame(userAccount);
+  console.log(userAccount.itemInfo);
 }
 
 function loginUserAccount() {
@@ -252,12 +389,8 @@ function loginUserAccount() {
   if (userName === "") return alert("Please put your name");
 
   if (gameDataLoad(userName) === "") return alert("There is no data");
-  let userGameAccount = gameDataLoad(userName);
-  config.signupLoginPage.classList.add("d-none");
-  config.mainGamePage.classList.add("d-block");
-
-  config.mainGamePage.append(mainGamePage(userGameAccount));
-  startCount(userGameAccount);
+  let userAccount = gameDataLoad(userName);
+  startGame(userAccount);
 }
 
 function mainGamePage(gameAccount) {
