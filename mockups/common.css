@@ -25,3 +25,13 @@ body {
   max-width: 65%;
   height: auto;
 }
+
+.system-icon {
+  color: #ffffff;
+  border: 1px solid #e2e3e5;
+  text-align: center;
+}
+
+.system-icon:hover {
+  background-color: rgba(251, 252, 252, 0.8);
+}

@@ -11,7 +11,8 @@ class GameAccount {
     days,
     money,
     amountPerClick,
-    updateAmountPerSecond
+    updateAmountPerSecond,
+    itemInfo
   ) {
     this.userName = userName;
     this.year = year;
@@ -20,6 +21,7 @@ class GameAccount {
     this.clickCount = 0;
     this.amountPerClick = amountPerClick;
     this.updateAmountPerSecond = updateAmountPerSecond;
+    this.itemInfo = itemInfo;
   }
 
   updatePerSeconds() {
@@ -77,133 +79,14 @@ class GameItem {
   }
 }
 
-const gameItems = [
-  new GameItem(
-    "Flip machine",
-    "ability",
-    500,
-    15000,
-    0,
-    25,
-    "click",
-    0,
-    "grill.png"
-  ),
-  new GameItem(
-    "ETF Stock",
-    "investment",
-    Infinity,
-    300000,
-    10,
-    0.1,
-    "sec",
-    0.1,
-    "syouken.png"
-  ),
-  new GameItem(
-    "ETF Bonds",
-    "investment",
-    Infinity,
-    300000,
-    0,
-    0.1,
-    "sec",
-    0.07,
-    "syouken.png"
-  ),
-  new GameItem(
-    "Lemonade Stand",
-    "realEstate",
-    1000,
-    30000,
-    0,
-    30,
-    "sec",
-    0,
-    "lemonade.png"
-  ),
-  new GameItem(
-    "Ice Cream Truck",
-    "realEstate",
-    500,
-    100000,
-    0,
-    120,
-    "sec",
-    0,
-    "icecream.png"
-  ),
-  new GameItem(
-    "House",
-    "realEstate",
-    100,
-    20000000,
-    0,
-    32000,
-    "sec",
-    0,
-    "house_1.png"
-  ),
-  new GameItem(
-    "TownHouse",
-    "realEstate",
-    100,
-    40000000,
-    0,
-    64000,
-    "sec",
-    0,
-    "designers_house.png"
-  ),
-  new GameItem(
-    "Mansion",
-    "realEstate",
-    20,
-    250000000,
-    0,
-    500000,
-    "sec",
-    0,
-    "mansion.png"
-  ),
-  new GameItem(
-    "Industrial Space",
-    "realEstate",
-    10,
-    1000000000,
-    0,
-    2200000,
-    "sec",
-    0,
-    "koujou.png"
-  ),
-  new GameItem(
-    "Hotel Skyscraper",
-    "realEstate",
-    5,
-    10000000000,
-    0,
-    25000000,
-    "sec",
-    0,
-    "hotel.png"
-  ),
-  new GameItem(
-    "Bullet-Speed Sky Railway",
-    "realEstate",
-    1,
-    10000000000000,
-    0,
-    30000000000,
-    "sec",
-    0,
-    "shinkansen.png"
-  ),
-];
-
-function gameDataSave(userAcount) {
+function gameDataSave(userAcount, counter) {
   let accountEncoded = JSON.stringify(userAcount);
   localStorage.setItem(userAcount.userName, accountEncoded);
+  endGame(counter);
+}
+function gameDataReset(userAccount, counter) {
+  localStorage.removeItem(userAccount.userName);
+  endGame(counter);
 }
 
 function gameDataLoad(userName) {
@@ -222,28 +105,180 @@ function gameDataLoad(userName) {
     parseInt(gameAccountDataObj.days),
     parseInt(gameAccountDataObj.money),
     parseInt(gameAccountDataObj.amountPerClick),
-    parseInt(gameAccountDataObj.updateAmountPerSecond)
+    parseInt(gameAccountDataObj.updateAmountPerSecond),
+    gameAccountDataObj.itemInfo
   );
 
   return gameAccountData;
 }
 
-function initializeUserAccount() {
+function createInitialUser(name) {
+  const itemList = [
+    new GameItem(
+      "Flip machine",
+      "ability",
+      500,
+      15000,
+      0,
+      25,
+      "click",
+      0,
+      "grill.png"
+    ),
+    new GameItem(
+      "ETF Stock",
+      "investment",
+      Infinity,
+      300000,
+      10,
+      0.1,
+      "sec",
+      0.1,
+      "syouken.png"
+    ),
+    new GameItem(
+      "ETF Bonds",
+      "investment",
+      Infinity,
+      300000,
+      0,
+      0.1,
+      "sec",
+      0.07,
+      "syouken.png"
+    ),
+    new GameItem(
+      "Lemonade Stand",
+      "realEstate",
+      1000,
+      30000,
+      0,
+      30,
+      "sec",
+      0,
+      "lemonade.png"
+    ),
+    new GameItem(
+      "Ice Cream Truck",
+      "realEstate",
+      500,
+      100000,
+      0,
+      120,
+      "sec",
+      0,
+      "icecream.png"
+    ),
+    new GameItem(
+      "House",
+      "realEstate",
+      100,
+      20000000,
+      0,
+      32000,
+      "sec",
+      0,
+      "house_1.png"
+    ),
+    new GameItem(
+      "TownHouse",
+      "realEstate",
+      100,
+      40000000,
+      0,
+      64000,
+      "sec",
+      0,
+      "designers_house.png"
+    ),
+    new GameItem(
+      "Mansion",
+      "realEstate",
+      20,
+      250000000,
+      0,
+      500000,
+      "sec",
+      0,
+      "mansion.png"
+    ),
+    new GameItem(
+      "Industrial Space",
+      "realEstate",
+      10,
+      1000000000,
+      0,
+      2200000,
+      "sec",
+      0,
+      "koujou.png"
+    ),
+    new GameItem(
+      "Hotel Skyscraper",
+      "realEstate",
+      5,
+      10000000000,
+      0,
+      25000000,
+      "sec",
+      0,
+      "hotel.png"
+    ),
+    new GameItem(
+      "Bullet-Speed Sky Railway",
+      "realEstate",
+      1,
+      10000000000000,
+      0,
+      30000000000,
+      "sec",
+      0,
+      "shinkansen.png"
+    ),
+  ];
+
+  let user = new GameAccount(name, 20, 0, 50000, 25, 0, itemList);
+  return user;
+}
+
+function moveToMainPage(userAccount) {
+  config.signupLoginPage.classList.add("d-none");
+  config.mainGamePage.classList.add("d-block");
+  config.signupLoginPage.classList.remove("d-block");
+  config.mainGamePage.classList.remove("d-none");
+  config.mainGamePage.append(mainGamePage(userAccount));
+}
+
+function moveToSignupLoginPage() {
+  config.signupLoginPage.classList.remove("d-none");
+  config.signupLoginPage.classList.add("d-block");
+  config.mainGamePage.classList.remove("d-block");
+  config.mainGamePage.classList.add("d-none");
+  config.mainGamePage.innerHTML = "";
+}
+
+function startGame(userAccount) {
+  moveToMainPage(userAccount);
+  let timerId = startCount(userAccount);
+  //let systemBtns = config.mainGamePage.querySelectorAll(".system-btn-area")[0];
+  config.mainGamePage.setAttribute("data-sbtn", timerId);
+}
+function endGame(counter) {
+  stopCount(counter);
+  moveToSignupLoginPage();
+}
+
+function newGame() {
   const initialForm = document.getElementById("userForm");
   let userName = initialForm
     .querySelectorAll(`input[name="userName"]`)
     .item(0).value;
-
   if (userName === "") return alert("Please put your name");
-  let userGameAccount = new GameAccount(userName, 20, 0, 50000, 25, 0);
-
-  config.signupLoginPage.classList.add("d-none");
-  config.mainGamePage.classList.add("d-block");
-  config.mainGamePage.append(mainGamePage(userGameAccount));
-  startCount(userGameAccount);
+  let userAccount = createInitialUser(userName);
+  startGame(userAccount);
 }
 
-function loginUserAccount() {
+function loginGame() {
   const initialForm = document.getElementById("userForm");
   let userName = initialForm
     .querySelectorAll(`input[name="userName"]`)
@@ -252,15 +287,11 @@ function loginUserAccount() {
   if (userName === "") return alert("Please put your name");
 
   if (gameDataLoad(userName) === "") return alert("There is no data");
-  let userGameAccount = gameDataLoad(userName);
-  config.signupLoginPage.classList.add("d-none");
-  config.mainGamePage.classList.add("d-block");
-
-  config.mainGamePage.append(mainGamePage(userGameAccount));
-  startCount(userGameAccount);
+  let userAccount = gameDataLoad(userName);
+  startGame(userAccount);
 }
 
-function mainGamePage(gameAccount) {
+function mainGamePage(userAccount) {
   let container = document.createElement("div");
   container.classList.add("col-12", "col-md-10", "col-lg-9");
 
@@ -268,12 +299,21 @@ function mainGamePage(gameAccount) {
   navyContainer.classList.add("col-12", "bg-navy", "d-flex", "p-2");
 
   let leftContainer = document.createElement("div");
-  leftContainer.classList.add("col-4", "bg-dark", "p-2");
+  leftContainer.classList.add(
+    "col-4",
+    "bg-dark",
+    "p-2",
+    "d-flex",
+    "flex-column",
+    "justify-content-between"
+  );
   leftContainer.id = "left-area";
+
+  let topContainer = document.createElement("div");
 
   let burgerCon = document.createElement("div");
   burgerCon.classList.add("bg-navy", "text-center", "text-white");
-  burgerCon.innerHTML = `<h4 id="click-count">${gameAccount.clickCount} Burgers</h4><p>one click ￥${gameAccount.amountPerClick}</p>`;
+  burgerCon.innerHTML = `<h4 id="click-count">${userAccount.clickCount} Burgers</h4><p>one click ￥${userAccount.amountPerClick}</p>`;
 
   let burgerImgCon = document.createElement("div");
   burgerImgCon.classList.add(
@@ -288,15 +328,54 @@ function mainGamePage(gameAccount) {
   burgerImg.src = `${config.imgPass}hamburger.png`;
 
   burgerImgCon.addEventListener("click", function () {
-    gameAccount.clicked();
+    userAccount.clicked();
     let clickCountH4 = document.getElementById("click-count");
     let userMoneyP = document.getElementById("user-money");
-    clickCountH4.innerHTML = `${gameAccount.clickCount} Burgers`;
-    userMoneyP.innerHTML = `¥${gameAccount.money}`;
+    clickCountH4.innerHTML = `${userAccount.clickCount} Burgers`;
+    userMoneyP.innerHTML = `¥${userAccount.money}`;
+  });
+  burgerImgCon.append(burgerImg);
+  topContainer.append(burgerCon, burgerImgCon);
+
+  let bottomContainer = document.createElement("div");
+  let systemBtnArea = document.createElement("div");
+  systemBtnArea.classList.add(
+    "col-12",
+    "d-flex",
+    "justify-content-between",
+    "align-items-center",
+    "system-btn-area"
+  );
+  systemBtnArea.innerHTML = `<div class="col-5 system-icon reset-btn">
+      <i class="fas fa-undo fa-3x p-1"></i>
+    </div>
+    <div class="col-5 system-icon save-btn">
+      <i class="fas fa-save fa-3x p-1"></i>
+    </div>`;
+
+  bottomContainer.append(systemBtnArea);
+  leftContainer.append(topContainer, bottomContainer);
+
+  let resetBtn = systemBtnArea.querySelectorAll(".reset-btn")[0];
+  resetBtn.addEventListener("click", function () {
+    let alertMes = confirm("Reset Your Account?");
+    if (alertMes) {
+      let timerId = parseInt(config.mainGamePage.getAttribute("data-sbtn"));
+      gameDataReset(userAccount, timerId);
+    }
   });
 
-  burgerImgCon.append(burgerImg);
-  leftContainer.append(burgerCon, burgerImgCon);
+  let saveBtn = systemBtnArea.querySelectorAll(".save-btn")[0];
+  saveBtn.addEventListener("click", function () {
+    let alertMes = confirm("Save Your Account?");
+    if (alertMes) {
+      let timerId = parseInt(config.mainGamePage.getAttribute("data-sbtn"));
+      alert(
+        `Please enter your username to log in. your username is "${userAccount.userName}"`
+      );
+      gameDataSave(userAccount, timerId);
+    }
+  });
 
   let rightContainer = document.createElement("div");
   rightContainer.classList.add("col-8", "px-2");
@@ -307,16 +386,16 @@ function mainGamePage(gameAccount) {
   infoCon.id = "info-area";
 
   infoCon.innerHTML = `<div class="bg-dark row m-0 text-center text-white">
-  <div class="bg-navy border-navy col-6 user-name"><p>${gameAccount.userName}</p></div>
-  <div class="bg-navy border-navy col-6"><p id="user-year">${gameAccount.year}years old</p></div>
-  <div class="bg-navy border-navy col-6"><p id="user-days">${gameAccount.days}days</p></div>
-  <div class="bg-navy border-navy col-6"><p id="user-money">¥${gameAccount.money}</p></div></div>`;
+  <div class="bg-navy border-navy col-6 user-name"><p>${userAccount.userName}</p></div>
+  <div class="bg-navy border-navy col-6"><p id="user-year">${userAccount.year}years old</p></div>
+  <div class="bg-navy border-navy col-6"><p id="user-days">${userAccount.days}days</p></div>
+  <div class="bg-navy border-navy col-6"><p id="user-money">¥${userAccount.money}</p></div></div>`;
 
   let itemCon = document.createElement("div");
   itemCon.classList.add("bg-dark", "p-2", "available-items-list");
   itemCon.id = "item-menu";
 
-  itemCon.append(itemList(gameAccount));
+  itemCon.append(itemList(userAccount));
 
   rightContainer.append(infoCon, itemCon);
   navyContainer.append(leftContainer, rightContainer);
@@ -328,8 +407,9 @@ function mainGamePage(gameAccount) {
 function itemList(userAccount) {
   let container = document.createElement("div");
   container.id = "item-container";
+  let items = userAccount.itemInfo;
 
-  for (let i = 0; i < gameItems.length; i++) {
+  for (let i = 0; i < items.length; i++) {
     let itemCon = document.createElement("div");
     itemCon.classList.add(
       "text-white",
@@ -344,21 +424,21 @@ function itemList(userAccount) {
     itemCon.innerHTML = `<div class="col-4 d-flex justify-content-center">
     <img
       class="col-12 image-fit"
-      src=${config.imgPass}${gameItems[i].imgUrl}
+      src=${config.imgPass}${items[i].imgUrl}
       alt=""
     />
   </div>
   <div class="col-4 text-start">
-    <h4>${gameItems[i].name}</h4>
-    <p>¥${gameItems[i].price}</p>
+    <h4>${items[i].name}</h4>
+    <p>¥${items[i].price}</p>
   </div>
   <div class="col-4 text-end">
-    <h4>${gameItems[i].amount}</h4>
-    <p class="text-success">¥${gameItems[i].profit} / ${gameItems[i].profitType}</p>
+    <h4>${items[i].amount}</h4>
+    <p class="text-success">¥${items[i].profit} / ${items[i].profitType}</p>
   </div>`;
 
     itemCon.addEventListener("click", function () {
-      let itemDetail = showItem(userAccount, gameItems[i], i);
+      let itemDetail = showItem(userAccount, i);
       container.innerHTML = "";
       container.append(itemDetail);
     });
@@ -368,7 +448,9 @@ function itemList(userAccount) {
   return container;
 }
 
-function showItem(userAccount, item, arrayCounter) {
+function showItem(userAccount, itemNumber) {
+  let item = userAccount.itemInfo[itemNumber];
+
   let container = document.createElement("div");
   container.classList.add("col-12", "bg-navy");
 
@@ -426,61 +508,12 @@ function showItem(userAccount, item, arrayCounter) {
   let purchaseBtn = btnCon.querySelectorAll(".next-btn")[0];
   purchaseBtn.addEventListener("click", function () {
     let purchaseInput = parseInt(document.getElementById("quantity").value);
-    purchaseItem(userAccount, item, arrayCounter, purchaseInput);
+    purchaseItem(userAccount, itemNumber, purchaseInput);
     config.mainGamePage.innerHTML = "";
     config.mainGamePage.append(mainGamePage(userAccount));
   });
 
   return container;
-}
-
-function purchaseItem(userAccount, item, arrayCounter, purchaseInput) {
-  if (purchaseInput <= 0) return alert(`You may check count for buying`);
-
-  if (purchaseInput > item.maxItemCount - item.amount)
-    return alert(`You cannot purchase any more`);
-
-  let totalPrice = calcTotalPrice(item, purchaseInput);
-  if (userAccount.money < totalPrice)
-    return alert(`Couldn't purchase it due to insufficient funds`);
-
-  userAccount.makePayment(totalPrice);
-  gameItems[arrayCounter].amount += purchaseInput;
-
-  if (item.type === "investment") {
-    let ProfitbyPerSeconds = Math.floor((totalPrice * item.profitRate) / 100);
-    userAccount.addAmountPerSecond(ProfitbyPerSeconds);
-    if (item.name === "ETF Stock") {
-      gameItems[arrayCounter].price = Math.floor(
-        gameItems[arrayCounter].price * 1.1
-      );
-    }
-  }
-  if (item.type === "ability") {
-    userAccount.updateAmountPerClick(item.profit * purchaseInput);
-  }
-  if (item.type === "realEstate") {
-    userAccount.addAmountPerSecond(item.profit * purchaseInput);
-  }
-  return alert(`Purchase of the ${item.name} was successful!.`);
-}
-
-let testAcount = new GameAccount("test", 20, 360, 50000000, 25, 0);
-gameDataSave(testAcount);
-
-function startCount(userGameAccount) {
-  setInterval(function () {
-    let userDay = document.getElementById("user-days");
-    userGameAccount.updatePerSeconds();
-    userDay.innerHTML = `${userGameAccount.days}days`;
-
-    let userYear = document.getElementById("user-year");
-
-    userYear.innerHTML = `${userGameAccount.year}years old`;
-
-    let userMoney = document.getElementById("user-money");
-    userMoney.innerHTML = `¥${userGameAccount.money}`;
-  }, 1000);
 }
 
 function calcTotalPrice(item, quantity) {
@@ -501,4 +534,56 @@ function calcTotalPrice(item, quantity) {
     return total;
   }
   return item.price * quantity;
+}
+
+function purchaseItem(userAccount, itemNumber, purchaseInput) {
+  if (purchaseInput <= 0) return alert(`You may check count for buying`);
+
+  let item = userAccount.itemInfo[itemNumber];
+
+  if (purchaseInput > item.maxItemCount - item.amount)
+    return alert(`You cannot purchase any more`);
+
+  let totalPrice = calcTotalPrice(item, purchaseInput);
+  if (userAccount.money < totalPrice)
+    return alert(`Couldn't purchase it due to insufficient funds`);
+
+  userAccount.makePayment(totalPrice);
+  item.amount += purchaseInput;
+
+  if (item.type === "investment") {
+    let profitByPerSeconds = Math.floor((totalPrice * item.profitRate) / 100);
+    userAccount.addAmountPerSecond(profitByPerSeconds);
+    if (item.name === "ETF Stock") {
+      item.price = Math.floor(item.price * 1.1);
+    }
+  }
+  if (item.type === "ability") {
+    userAccount.updateAmountPerClick(item.profit * purchaseInput);
+  }
+  if (item.type === "realEstate") {
+    userAccount.addAmountPerSecond(item.profit * purchaseInput);
+  }
+  return alert(`Purchase of the ${item.name} was successful!.`);
+}
+
+function startCount(userGameAccount) {
+  let timerId = setInterval(function () {
+    let userDay = document.getElementById("user-days");
+    userGameAccount.updatePerSeconds();
+    userDay.innerHTML = `${userGameAccount.days}days`;
+
+    let userYear = document.getElementById("user-year");
+
+    userYear.innerHTML = `${userGameAccount.year}years old`;
+
+    let userMoney = document.getElementById("user-money");
+    userMoney.innerHTML = `¥${userGameAccount.money}`;
+  }, 1000);
+
+  return timerId;
+}
+
+function stopCount(timerId) {
+  clearInterval(timerId);
 }
