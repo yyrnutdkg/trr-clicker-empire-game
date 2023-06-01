@@ -277,8 +277,17 @@ function mainGamePage(userAccount) {
   navyContainer.classList.add("col-12", "bg-navy", "d-flex", "p-2");
 
   let leftContainer = document.createElement("div");
-  leftContainer.classList.add("col-4", "bg-dark", "p-2");
+  leftContainer.classList.add(
+    "col-4",
+    "bg-dark",
+    "p-2",
+    "d-flex",
+    "flex-column",
+    "justify-content-between"
+  );
   leftContainer.id = "left-area";
+
+  let topContainer = document.createElement("div");
 
   let burgerCon = document.createElement("div");
   burgerCon.classList.add("bg-navy", "text-center", "text-white");
@@ -303,9 +312,27 @@ function mainGamePage(userAccount) {
     clickCountH4.innerHTML = `${userAccount.clickCount} Burgers`;
     userMoneyP.innerHTML = `¥${userAccount.money}`;
   });
-
   burgerImgCon.append(burgerImg);
-  leftContainer.append(burgerCon, burgerImgCon);
+  topContainer.append(burgerCon, burgerImgCon);
+
+  let bottomContainer = document.createElement("div");
+  let systemBtnArea = document.createElement("div");
+  systemBtnArea.classList.add(
+    "col-12",
+    "d-flex",
+    "justify-content-between",
+    "align-items-center"
+  );
+  systemBtnArea.innerHTML = `<div class="col-5 system-icon" id="reset-btn">
+      <i class="fas fa-undo fa-3x p-1"></i>
+    </div>
+    <div class="col-5 system-icon" id="save-btn">
+      <i class="fas fa-save fa-3x p-1"></i>
+    </div>`;
+
+  bottomContainer.append(systemBtnArea);
+
+  leftContainer.append(topContainer, bottomContainer);
 
   let rightContainer = document.createElement("div");
   rightContainer.classList.add("col-8", "px-2");
