@@ -10,7 +10,6 @@ class GameAccount {
     year,
     days,
     money,
-    clickCount,
     amountPerClick,
     updateAmountPerSecond
   ) {
@@ -18,7 +17,7 @@ class GameAccount {
     this.year = year;
     this.days = days;
     this.money = money;
-    this.clickCount = clickCount;
+    this.clickCount = 0;
     this.amountPerClick = amountPerClick;
     this.updateAmountPerSecond = updateAmountPerSecond;
   }
@@ -47,6 +46,7 @@ class GameAccount {
 class GameItem {
   constructor(
     name,
+    type,
     maxItemCount,
     price,
     purchaseIncreaseRate,
@@ -56,6 +56,7 @@ class GameItem {
     imgUrl
   ) {
     this.name = name;
+    this.type = type;
     this.amount = 0;
     this.maxItemCount = maxItemCount;
     this.price = price;
@@ -68,9 +69,20 @@ class GameItem {
 }
 
 const gameItems = [
-  new GameItem("Flip machine", 500, 15000, 0, 25, "click", 0, "grill.png"),
+  new GameItem(
+    "Flip machine",
+    "ability",
+    500,
+    15000,
+    0,
+    25,
+    "click",
+    0,
+    "grill.png"
+  ),
   new GameItem(
     "ETF Stock",
+    "investment",
     Infinity,
     300000,
     10,
@@ -81,6 +93,7 @@ const gameItems = [
   ),
   new GameItem(
     "ETF Bonds",
+    "investment",
     Infinity,
     300000,
     0,
@@ -89,9 +102,20 @@ const gameItems = [
     0.07,
     "syouken.png"
   ),
-  new GameItem("Lemonade Stand", 1000, 30000, 0, 30, "sec", 0, "lemonade.png"),
+  new GameItem(
+    "Lemonade Stand",
+    "realEstate",
+    1000,
+    30000,
+    0,
+    30,
+    "sec",
+    0,
+    "lemonade.png"
+  ),
   new GameItem(
     "Ice Cream Truck",
+    "realEstate",
     500,
     100000,
     0,
@@ -100,9 +124,20 @@ const gameItems = [
     0,
     "icecream.png"
   ),
-  new GameItem("House", 100, 20000000, 0, 32000, "sec", 0, "house_1.png"),
+  new GameItem(
+    "House",
+    "realEstate",
+    100,
+    20000000,
+    0,
+    32000,
+    "sec",
+    0,
+    "house_1.png"
+  ),
   new GameItem(
     "TownHouse",
+    "realEstate",
     100,
     40000000,
     0,
@@ -111,9 +146,20 @@ const gameItems = [
     0,
     "designers_house.png"
   ),
-  new GameItem("Mansion", 20, 250000000, 0, 500000, "sec", 0, "mansion.png"),
+  new GameItem(
+    "Mansion",
+    "realEstate",
+    20,
+    250000000,
+    0,
+    500000,
+    "sec",
+    0,
+    "mansion.png"
+  ),
   new GameItem(
     "Industrial Space",
+    "realEstate",
     10,
     1000000000,
     0,
@@ -124,6 +170,7 @@ const gameItems = [
   ),
   new GameItem(
     "Hotel Skyscraper",
+    "realEstate",
     5,
     10000000000,
     0,
@@ -134,6 +181,7 @@ const gameItems = [
   ),
   new GameItem(
     "Bullet-Speed Sky Railway",
+    "realEstate",
     1,
     10000000000000,
     0,
@@ -164,7 +212,6 @@ function gameDataLoad(userName) {
     parseInt(gameAccountDataObj.year),
     parseInt(gameAccountDataObj.days),
     parseInt(gameAccountDataObj.money),
-    parseInt(gameAccountDataObj.clickCount),
     parseInt(gameAccountDataObj.amountPerClick),
     parseInt(gameAccountDataObj.updateAmountPerSecond)
   );
@@ -179,7 +226,7 @@ function initializeUserAccount() {
     .item(0).value;
 
   if (userName === "") return alert("Please put your name");
-  let userGameAccount = new GameAccount(userName, 20, 0, 50000, 0, 25, 0);
+  let userGameAccount = new GameAccount(userName, 20, 0, 50000, 25, 0);
 
   config.signupLoginPage.classList.add("d-none");
   config.mainGamePage.classList.add("d-block");
