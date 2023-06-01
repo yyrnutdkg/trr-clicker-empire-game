@@ -100,14 +100,15 @@ function gameDataLoad(userName) {
     parseInt(gameAccountDataObj.days),
     parseInt(gameAccountDataObj.money),
     parseInt(gameAccountDataObj.amountPerClick),
-    parseInt(gameAccountDataObj.updateAmountPerSecond)
+    parseInt(gameAccountDataObj.updateAmountPerSecond),
+    gameAccountDataObj.itemInfo
   );
 
   return gameAccountData;
 }
 
 function createInitialUser(name) {
-  let itemList = [
+  const itemList = [
     new GameItem(
       "Flip machine",
       "ability",
@@ -253,10 +254,9 @@ function newGame() {
   if (userName === "") return alert("Please put your name");
   let userAccount = createInitialUser(userName);
   startGame(userAccount);
-  console.log(userAccount.itemInfo);
 }
 
-function loginUserAccount() {
+function loginGame() {
   const initialForm = document.getElementById("userForm");
   let userName = initialForm
     .querySelectorAll(`input[name="userName"]`)
@@ -497,7 +497,7 @@ function purchaseItem(userAccount, itemNumber, purchaseInput) {
   return alert(`Purchase of the ${item.name} was successful!.`);
 }
 
-let testAcount = new GameAccount("test", 20, 360, 50000000, 25, 0);
+let testAcount = createInitialUser("test");
 gameDataSave(testAcount);
 
 function startCount(userGameAccount) {
