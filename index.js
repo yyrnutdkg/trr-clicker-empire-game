@@ -314,11 +314,17 @@ function showItem(nodeList, item) {
     </div>
     <div>
       <p class="ps-2 text-white">How many would you like to buy?</p>
-      <form class="pt-1 px-2" action="">
-        <input type="number" placeholder="0" class="col-12 form-control" />
+      <form class="pt-1 px-2">
+        <input type="number" id="quantity" placeholder="0" class="col-12 form-control" />
       </form>
-      <p class="p-2 text-end text-white">total: ¥0</p>
+      <p class="p-2 text-end text-white" id="total-price">total: ¥0</p>
     </div>`;
+
+  container.querySelector("#quantity").addEventListener("change", function () {
+    let quantity = container.querySelector("#quantity");
+    let totalPrice = item.price * parseInt(quantity.value);
+    container.querySelector("#total-price").innerHTML = `total: ¥${totalPrice}`;
+  });
 
   let btnCon = document.createElement("div");
   btnCon.classList.add("row", "m-0", "mb-2", "pb-3");
