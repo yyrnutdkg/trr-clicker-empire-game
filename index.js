@@ -69,8 +69,26 @@ class GameItem {
 
 const gameItems = [
   new GameItem("Flip machine", 500, 15000, 0, 25, "click", 0, "grill.png"),
-  new GameItem("ETF Stock", Infinity, 300000, 10, 0, "sec", 0.1, "syouken.png"),
-  new GameItem("ETF Bonds", Infinity, 300000, 0, 0, "sec", 0.07, "syouken.png"),
+  new GameItem(
+    "ETF Stock",
+    Infinity,
+    300000,
+    10,
+    0.1,
+    "sec",
+    0.1,
+    "syouken.png"
+  ),
+  new GameItem(
+    "ETF Bonds",
+    Infinity,
+    300000,
+    0,
+    0.1,
+    "sec",
+    0.07,
+    "syouken.png"
+  ),
   new GameItem("Lemonade Stand", 1000, 30000, 0, 30, "sec", 0, "lemonade.png"),
   new GameItem(
     "Ice Cream Truck",
