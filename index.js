@@ -492,7 +492,7 @@ function itemList(userAccount) {
   </div>`;
 
     itemCon.addEventListener("click", function () {
-      let itemDetail = showItem(userAccount, items[i], i);
+      let itemDetail = showItem(userAccount, i);
       container.innerHTML = "";
       container.append(itemDetail);
     });
@@ -502,7 +502,9 @@ function itemList(userAccount) {
   return container;
 }
 
-function showItem(userAccount, item, arrayCounter) {
+function showItem(userAccount, itemNumber) {
+  let item = userAccount.itemInfo[itemNumber];
+
   let container = document.createElement("div");
   container.classList.add("col-12", "bg-navy");
 
