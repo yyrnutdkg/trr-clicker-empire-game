@@ -41,6 +41,15 @@ class GameAccount {
     this.clickCount = this.clickCount + 1;
     this.money = this.money + this.amountPerClick;
   }
+  makePayment(itemCost) {
+    this.money = this.money - itemCost;
+  }
+  updateAmountPerClick(itemProfit) {
+    this.amountPerClick = this.amountPerClick + itemProfit;
+  }
+  addAmountPerSecond(itemProfit) {
+    this.updateAmountPerSecond = this.updateAmountPerSecond + itemProfit;
+  }
 }
 
 class GameItem {
@@ -307,7 +316,7 @@ function mainGamePage(gameAccount) {
   itemCon.classList.add("bg-dark", "p-2", "available-items-list");
   itemCon.id = "item-menu";
 
-  itemCon.append(itemList());
+  itemCon.append(itemList(gameAccount));
 
   rightContainer.append(infoCon, itemCon);
   navyContainer.append(leftContainer, rightContainer);
@@ -316,7 +325,7 @@ function mainGamePage(gameAccount) {
   return container;
 }
 
-function itemList() {
+function itemList(userAccount) {
   let container = document.createElement("div");
   container.id = "item-container";
 
@@ -344,12 +353,12 @@ function itemList() {
     <p>¥${gameItems[i].price}</p>
   </div>
   <div class="col-4 text-end">
-    <h4>1</h4>
+    <h4>${gameItems[i].amount}</h4>
     <p class="text-success">¥${gameItems[i].profit} / ${gameItems[i].profitType}</p>
   </div>`;
 
     itemCon.addEventListener("click", function () {
-      let itemDetail = showItem(container, gameItems[i]);
+      let itemDetail = showItem(userAccount, gameItems[i], i);
       container.innerHTML = "";
       container.append(itemDetail);
     });
@@ -359,7 +368,7 @@ function itemList() {
   return container;
 }
 
-function showItem(nodeList, item) {
+function showItem(userAccount, item, arrayCounter) {
   let container = document.createElement("div");
   container.classList.add("col-12", "bg-navy");
 
@@ -387,7 +396,7 @@ function showItem(nodeList, item) {
 
   container.querySelector("#quantity").addEventListener("change", function () {
     let quantity = container.querySelector("#quantity");
-    let totalPrice = item.price * parseInt(quantity.value);
+    let totalPrice = calcTotalPrice(item, parseInt(quantity.value));
     container.querySelector("#total-price").innerHTML = `total: ¥${totalPrice}`;
   });
 
@@ -410,14 +419,53 @@ function showItem(nodeList, item) {
 
   let backbtn = btnCon.querySelectorAll(".back-btn")[0];
   backbtn.addEventListener("click", function () {
-    container.innerHTML = "";
-    container.append(itemList());
+    config.mainGamePage.innerHTML = "";
+    config.mainGamePage.append(mainGamePage(userAccount));
+  });
+
+  let purchaseBtn = btnCon.querySelectorAll(".next-btn")[0];
+  purchaseBtn.addEventListener("click", function () {
+    let purchaseInput = parseInt(document.getElementById("quantity").value);
+    purchaseItem(userAccount, item, arrayCounter, purchaseInput);
+    config.mainGamePage.innerHTML = "";
+    config.mainGamePage.append(mainGamePage(userAccount));
   });
 
   return container;
 }
 
-let testAcount = new GameAccount("test", "20", "360", "10000", 0, 25, 25);
+function purchaseItem(userAccount, item, arrayCounter, purchaseInput) {
+  if (purchaseInput <= 0) return alert(`You may check count for buying`);
+
+  if (purchaseInput > item.maxItemCount - item.amount)
+    return alert(`You cannot purchase any more`);
+
+  let totalPrice = calcTotalPrice(item, purchaseInput);
+  if (userAccount.money < totalPrice)
+    return alert(`Couldn't purchase it due to insufficient funds`);
+
+  userAccount.makePayment(totalPrice);
+  gameItems[arrayCounter].amount += purchaseInput;
+
+  if (item.type === "investment") {
+    let ProfitbyPerSeconds = Math.floor((totalPrice * item.profitRate) / 100);
+    userAccount.addAmountPerSecond(ProfitbyPerSeconds);
+    if (item.name === "ETF Stock") {
+      gameItems[arrayCounter].price = Math.floor(
+        gameItems[arrayCounter].price * 1.1
+      );
+    }
+  }
+  if (item.type === "ability") {
+    userAccount.updateAmountPerClick(item.profit * purchaseInput);
+  }
+  if (item.type === "realEstate") {
+    userAccount.addAmountPerSecond(item.profit * purchaseInput);
+  }
+  return alert(`Purchase of the ${item.name} was successful!.`);
+}
+
+let testAcount = new GameAccount("test", 20, 360, 50000000, 25, 0);
 gameDataSave(testAcount);
 
 function startCount(userGameAccount) {
@@ -433,4 +481,24 @@ function startCount(userGameAccount) {
     let userMoney = document.getElementById("user-money");
     userMoney.innerHTML = `¥${userGameAccount.money}`;
   }, 1000);
+}
+
+function calcTotalPrice(item, quantity) {
+  if (quantity <= 0) return 0;
+  if (item.name === "ETF Stock") {
+    let priceUpRate = item.purchaseIncreaseRate / 100;
+
+    let total = 0;
+    let culcPrice = 0;
+
+    for (let i = 1; i <= quantity; i++) {
+      culcPrice != 0
+        ? (culcPrice = Math.floor(culcPrice * (1 + priceUpRate)))
+        : (culcPrice = item.price);
+      total = total + culcPrice;
+    }
+
+    return total;
+  }
+  return item.price * quantity;
 }
