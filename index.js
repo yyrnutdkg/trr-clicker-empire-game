@@ -83,6 +83,10 @@ function gameDataSave(userAcount) {
   let accountEncoded = JSON.stringify(userAcount);
   localStorage.setItem(userAcount.userName, accountEncoded);
 }
+function gameDataReset(userAccount, counter) {
+  localStorage.removeItem(userAccount.name);
+  endGame(counter);
+}
 
 function gameDataLoad(userName) {
   let gameAccountDataObj = "";
@@ -239,11 +243,31 @@ function createInitialUser(name) {
   return user;
 }
 
-function startGame(userAccount) {
+function moveToMainPage(userAccount) {
   config.signupLoginPage.classList.add("d-none");
   config.mainGamePage.classList.add("d-block");
+  config.signupLoginPage.classList.remove("d-block");
+  config.mainGamePage.classList.remove("d-none");
   config.mainGamePage.append(mainGamePage(userAccount));
-  startCount(userAccount);
+}
+
+function moveToSignupLoginPage() {
+  config.signupLoginPage.classList.remove("d-none");
+  config.signupLoginPage.classList.add("d-block");
+  config.mainGamePage.classList.remove("d-block");
+  config.mainGamePage.classList.add("d-none");
+  config.mainGamePage.innerHTML = "";
+}
+
+function startGame(userAccount) {
+  moveToMainPage(userAccount);
+  let timerId = startCount(userAccount);
+  let systemBtns = config.mainGamePage.querySelectorAll(".system-btn-area")[0];
+  systemBtns.setAttribute("data-sbtn", timerId);
+}
+function endGame(counter) {
+  stopCount(counter);
+  moveToSignupLoginPage();
 }
 
 function newGame() {
@@ -321,9 +345,10 @@ function mainGamePage(userAccount) {
     "col-12",
     "d-flex",
     "justify-content-between",
-    "align-items-center"
+    "align-items-center",
+    "system-btn-area"
   );
-  systemBtnArea.innerHTML = `<div class="col-5 system-icon" id="reset-btn">
+  systemBtnArea.innerHTML = `<div class="col-5 system-icon reset-btn">
       <i class="fas fa-undo fa-3x p-1"></i>
     </div>
     <div class="col-5 system-icon" id="save-btn">
@@ -331,8 +356,16 @@ function mainGamePage(userAccount) {
     </div>`;
 
   bottomContainer.append(systemBtnArea);
-
   leftContainer.append(topContainer, bottomContainer);
+
+  let resetBtn = systemBtnArea.querySelectorAll(".reset-btn")[0];
+  resetBtn.addEventListener("click", function () {
+    let timerId = parseInt(systemBtnArea.getAttribute("data-sbtn"));
+    let alertMes = confirm("Reset Your Account?");
+    if (alertMes) {
+      gameDataReset(userAccount, timerId);
+    }
+  });
 
   let rightContainer = document.createElement("div");
   rightContainer.classList.add("col-8", "px-2");
@@ -528,7 +561,7 @@ let testAcount = createInitialUser("test");
 gameDataSave(testAcount);
 
 function startCount(userGameAccount) {
-  setInterval(function () {
+  let timerId = setInterval(function () {
     let userDay = document.getElementById("user-days");
     userGameAccount.updatePerSeconds();
     userDay.innerHTML = `${userGameAccount.days}days`;
@@ -540,4 +573,10 @@ function startCount(userGameAccount) {
     let userMoney = document.getElementById("user-money");
     userMoney.innerHTML = `¥${userGameAccount.money}`;
   }, 1000);
+
+  return timerId;
+}
+
+function stopCount(timerId) {
+  clearInterval(timerId);
 }
