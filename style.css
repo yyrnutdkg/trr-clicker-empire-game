@@ -1,0 +1,41 @@
+p {
+  margin: 0;
+}
+
+.available-items-list {
+  overflow: auto;
+  height: 66vh;
+}
+.bg-navy {
+  background-color: #3d5279;
+}
+.border-navy {
+  border: 0.1rem solid #212529;
+}
+.item-card:hover {
+  border: 1px solid #0dcaf0;
+}
+.image-fit {
+  object-fit: contain;
+  max-width: 65%;
+  height: auto;
+}
+.system-icon {
+  color: #ffffff;
+  border: 1px solid #e2e3e5;
+  text-align: center;
+}
+
+.system-icon:hover {
+  background-color: rgba(251, 252, 252, 0.8);
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 0.4rem;
+  }
+  .available-items-list {
+    overflow: auto;
+    height: 85vh;
+  }
+}
