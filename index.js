@@ -260,7 +260,6 @@ function moveToSignupLoginPage() {
 function startGame(userAccount) {
   moveToMainPage(userAccount);
   let timerId = startCount(userAccount);
-  //let systemBtns = config.mainGamePage.querySelectorAll(".system-btn-area")[0];
   config.mainGamePage.setAttribute("data-sbtn", timerId);
 }
 function endGame(counter) {
