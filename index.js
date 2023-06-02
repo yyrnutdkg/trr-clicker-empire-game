@@ -272,7 +272,7 @@ function newGame() {
   let userName = initialForm
     .querySelectorAll(`input[name="userName"]`)
     .item(0).value;
-  if (userName === "") return alert("Please put your name");
+  if (userName === "") return alert("ユーザ名を入力してください。");
   let userAccount = createInitialUser(userName);
   startGame(userAccount);
 }
@@ -283,9 +283,9 @@ function loginGame() {
     .querySelectorAll(`input[name="userName"]`)
     .item(0).value;
 
-  if (userName === "") return alert("Please put your name");
+  if (userName === "") return alert("ユーザ名を入力してください。");
 
-  if (gameDataLoad(userName) === "") return alert("There is no data");
+  if (gameDataLoad(userName) === "") return alert("データがありません。");
   let userAccount = gameDataLoad(userName);
   startGame(userAccount);
 }
@@ -357,7 +357,7 @@ function mainGamePage(userAccount) {
 
   let resetBtn = systemBtnArea.querySelectorAll(".reset-btn")[0];
   resetBtn.addEventListener("click", function () {
-    let alertMes = confirm("Reset Your Account?");
+    let alertMes = confirm("リセットしますか?");
     if (alertMes) {
       let timerId = parseInt(config.mainGamePage.getAttribute("data-sbtn"));
       gameDataReset(userAccount, timerId);
@@ -366,11 +366,11 @@ function mainGamePage(userAccount) {
 
   let saveBtn = systemBtnArea.querySelectorAll(".save-btn")[0];
   saveBtn.addEventListener("click", function () {
-    let alertMes = confirm("Save Your Account?");
+    let alertMes = confirm("保存しますか?");
     if (alertMes) {
       let timerId = parseInt(config.mainGamePage.getAttribute("data-sbtn"));
       alert(
-        `Please enter your username to log in. your username is "${userAccount.userName}"`
+        `次回ログインの際は自身のユーザ名を入力してください。 あなたのユーザ名は "${userAccount.userName}です。"`
       );
       gameDataSave(userAccount, timerId);
     }
@@ -472,7 +472,9 @@ function showItem(userAccount, itemNumber) {
     <div>
       <p class="ps-2 text-white">How many would you like to buy?</p>
       <form class="pt-1 px-2">
-        <input type="number" id="quantity" placeholder="0" class="col-12 form-control" />
+        <input type="number" id="quantity" placeholder="0" class="col-12 form-control" min="1" max="${
+          item.maxItemCount - item.amount
+        }"/>
       </form>
       <p class="p-2 text-end text-white" id="total-price">total: ¥0</p>
     </div>`;
@@ -538,16 +540,17 @@ function calcTotalPrice(item, quantity) {
 }
 
 function purchaseItem(userAccount, itemNumber, purchaseInput) {
-  if (purchaseInput <= 0) return alert(`You may check count for buying`);
+  if (purchaseInput <= 0)
+    return alert(`購入数の入力があるか確認してください。`);
 
   let item = userAccount.itemInfo[itemNumber];
 
   if (purchaseInput > item.maxItemCount - item.amount)
-    return alert(`You cannot purchase any more`);
+    return alert(`これ以上購入することができません。`);
 
   let totalPrice = calcTotalPrice(item, purchaseInput);
   if (userAccount.money < totalPrice)
-    return alert(`Couldn't purchase it due to insufficient funds`);
+    return alert(`所持金が不足しているため、購入できません。`);
 
   userAccount.makePayment(totalPrice);
   item.amount += purchaseInput;
@@ -565,7 +568,7 @@ function purchaseItem(userAccount, itemNumber, purchaseInput) {
   if (item.type === "realEstate") {
     userAccount.addAmountPerSecond(item.profit * purchaseInput);
   }
-  return alert(`Purchase of the ${item.name} was successful!.`);
+  return alert(`${item.name}の購入が完了しました。`);
 }
 
 function startCount(userGameAccount) {
