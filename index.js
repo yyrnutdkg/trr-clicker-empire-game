@@ -346,10 +346,10 @@ function mainGamePage(userAccount) {
     "system-btn-area"
   );
   systemBtnArea.innerHTML = `<div class="col-5 system-icon reset-btn">
-      <i class="fas fa-undo fa-3x p-1"></i>
+      <i class="fas fa-undo fa-2x fa-sm-3x p-1"></i>
     </div>
     <div class="col-5 system-icon save-btn">
-      <i class="fas fa-save fa-3x p-1"></i>
+      <i class="fas fa-save fa-2x fa-sm-3x p-1"></i>
     </div>`;
 
   bottomContainer.append(systemBtnArea);
@@ -384,7 +384,7 @@ function mainGamePage(userAccount) {
   infoCon.classList.add("pt-2", "pb-4", "px-2");
   infoCon.id = "info-area";
 
-  infoCon.innerHTML = `<div class="bg-dark row m-0 text-center text-white">
+  infoCon.innerHTML = `<div class="bg-dark d-flex flex-wrap text-center text-white">
   <div class="bg-navy border-navy col-6 user-name"><p>${userAccount.userName}</p></div>
   <div class="bg-navy border-navy col-6"><p id="user-year">${userAccount.year}years old</p></div>
   <div class="bg-navy border-navy col-6"><p id="user-days">${userAccount.days}days</p></div>
@@ -420,22 +420,24 @@ function itemList(userAccount) {
       "item-card",
       "p-2"
     );
-    itemCon.innerHTML = `<div class="col-4 d-flex justify-content-center">
+    itemCon.innerHTML = `<div class="col-3 d-flex justify-content-center">
     <img
       class="col-12 image-fit"
       src=${config.imgPass}${items[i].imgUrl}
       alt=""
     />
   </div>
-  <div class="col-4 text-start">
-    <h4>${items[i].name}</h4>
-    <p>¥${items[i].price}</p>
+  <div class="col-9">
+    <div class="d-flex justify-content-between">
+      <h4>${items[i].name}</h4>
+      <h4>${items[i].amount}</h4>
+    </div>
+    <div class="d-md-flex justify-content-md-between">
+      <p>¥${items[i].price}</p>
+      <p class="text-success">¥${items[i].profit} / ${items[i].profitType}</p>
+      </div>
   </div>
-  <div class="col-4 text-end">
-    <h4>${items[i].amount}</h4>
-    <p class="text-success">¥${items[i].profit} / ${items[i].profitType}</p>
-  </div>`;
-
+  `;
     itemCon.addEventListener("click", function () {
       let itemDetail = showItem(userAccount, i);
       container.innerHTML = "";
